@@ -1,7 +1,14 @@
 <?php
-$bdd = new PDO('mysql:host=localhost;dbname=mon_armoire;charset=utf8', 'root', 'root');
-$reponse = $bdd->query('SELECT * FROM mes_chaussettes WHERE pointure <= 41 AND couleur = "bleu"');
-$donnees = $reponse->fetch();
+require 'vendor/autoload.php';
+ORM::configure('mysql:host=localhost;dbname=mon_armoire;charset=utf8');
+ORM::configure('username', 'root');
+ORM::configure('password', 'root');
+$reponse = ORM::for_table('mes_chaussettes')->where('couleur', 'rouge')->find_many();
+
+foreach ($reponse as $value) {
+  $value->couleur = 'rose';
+  $value->save();
+}
 
  ?><!DOCTYPE html>
 <html>
@@ -19,17 +26,16 @@ $donnees = $reponse->fetch();
           <th>couleur</th>
           <th>date_lavage</th>
         </tr>
-        <?php while($donnees = $reponse->fetch()) { ?>
+        <?php foreach ($reponse as $value) : ?>
           <tr>
-            <td><?= $donnees['id'] ?></td>
-            <td><?= $donnees['pointure'] ?></td>
-            <td><?= $donnees['temp_lavage'] ?></td>
-            <td><?= $donnees['description'] ?></td>
-            <td><?= $donnees['couleur'] ?></td>
-            <td><?= $donnees['date_lavage'] ?></td>
+            <td><?= $value['id'] ?></td>
+            <td><?= $value['pointure'] ?></td>
+            <td><?= $value['temp_lavage'] ?></td>
+            <td><?= $value['description'] ?></td>
+            <td><?= $value['couleur'] ?></td>
+            <td><?= $value['date_lavage'] ?></td>
           </tr>
-        <?php }
-        $reponse->closeCursor() ?>
+        <?php endforeach ?>
       </table>
 
   </body>
