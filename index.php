@@ -3,12 +3,7 @@ require 'vendor/autoload.php';
 ORM::configure('mysql:host=localhost;dbname=mon_armoire;charset=utf8');
 ORM::configure('username', 'root');
 ORM::configure('password', 'root');
-$reponse = ORM::for_table('mes_chaussettes')->where('couleur', 'rouge')->find_many();
-
-foreach ($reponse as $value) {
-  $value->couleur = 'rose';
-  $value->save();
-}
+$reponse = ORM::for_table('mes_chaussettes')->where_gt('pointure', 40)->find_many();
 
  ?><!DOCTYPE html>
 <html>
